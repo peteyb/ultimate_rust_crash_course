@@ -1,6 +1,14 @@
 const MY_CONST: i32 = 100;
+use hello::greet;
+use rand::prelude::*;
 
 fn main() {
+    let mut rng = thread_rng();
+    let rng_val: f64 = rng.gen();
+    println!("Range val = {}", rng_val);
+    
+    greet();
+
     println!("Hello, world!");
 
     let bunnies = 2;
@@ -26,6 +34,6 @@ fn main() {
     }
     println!("x{} has value", x);
 
-    let enimgma: i32;
-    println!("enigma has value {}", enimgma);
+    // let enimgma: i32;
+    // println!("enigma has value {}", enimgma);
 }
