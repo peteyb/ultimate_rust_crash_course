@@ -19,9 +19,9 @@ fn main() {
         // - If arg is "sum", then call the sum() function
         // - If arg is "double", then call the double() function
         // - If arg is anything else, then call the count() function, passing "arg" to it.
-        if arg == "sum" {
+        if arg == "sum".to_string() {
             sum()
-        } else if arg == "double" {
+        } else if arg == String::from("double") {
             double()
         } else {
             count(arg)
