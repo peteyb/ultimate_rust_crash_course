@@ -3,6 +3,7 @@ use hello::{do_stuff_mutable_reference, do_stuff_owner, do_stuff_reference, gree
 use rand::prelude::*;
 use std::collections::HashMap;
 use std::fs::File;
+use std::{thread, time};
 
 fn main() {
     let mut rng = thread_rng();
@@ -157,6 +158,35 @@ fn main() {
             println!("File open error {}", e)
         }
     }
+
+    // closures (anonymous functions)
+    let add = |x: i32, y: i32| x + y;
+    println!("add = {}", add(1, 2));
+
+    let s = "emoji".to_string();
+    let f = move || {
+        println!("{}", s);
+    };
+    f();
+
+    let v = vec![2, 4, 6];
+    let v_result = v
+        .iter()
+        .map(|x| x * 3) // times each item in vector by 3
+        .filter(|x| *x > 10) // filter (keep) those with value greater than 10
+        .fold(0, |acc, x| acc + x); // sum accumulated value of x
+    println!("{}", v_result);
+
+    // threads (use async await for disc io waiting)
+    let handle = thread::spawn(move || {
+        // do stuff in child thread
+        println!("Hello from child thread");
+    });
+    thread::sleep(time::Duration::from_secs(1));
+    // do stuff simultaneously in main thread
+    println!("Im in the main thread");
+    // wait until thread has exited
+    handle.join().unwrap();
 }
 
 struct RedFox {
