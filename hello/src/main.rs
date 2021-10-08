@@ -1,12 +1,21 @@
 const MY_CONST: i32 = 100;
-use hello::greet;
+use hello::{do_stuff_mutable_reference, do_stuff_owner, do_stuff_reference, greet};
 use rand::prelude::*;
 
 fn main() {
+    let mut s1 = String::from("abc");
+    let s2 = String::from("abc");
+    let s3 = s1.clone();
+    println!("s3 = {}", s3);
+    do_stuff_reference(&s1);
+    println!("{}", s1);
+    do_stuff_owner(s2);
+    do_stuff_mutable_reference(&mut s1);
+    // println!("{}", s2);
+
     let mut rng = thread_rng();
     let rng_val: f64 = rng.gen();
     println!("Range val = {}", rng_val);
-    
     greet();
 
     println!("Hello, world!");
@@ -18,7 +27,10 @@ fn main() {
     let bunnies_text = format!("{} bunnies", bunnies);
     println!("{}", bunnies_text);
     println!("{}", format!("{} bunnies2", bunnies2));
-    println!("{}", format!("{} bunnies3 with {} carrots", bunnies3, carrots));
+    println!(
+        "{}",
+        format!("{} bunnies3 with {} carrots", bunnies3, carrots)
+    );
 
     bunnies2 = 45;
     println!("{} bunnies2 with MY_CONST={}", bunnies2, MY_CONST);
