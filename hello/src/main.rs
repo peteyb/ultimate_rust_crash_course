@@ -3,16 +3,6 @@ use hello::{do_stuff_mutable_reference, do_stuff_owner, do_stuff_reference, gree
 use rand::prelude::*;
 
 fn main() {
-    let mut s1 = String::from("abc");
-    let s2 = String::from("abc");
-    let s3 = s1.clone();
-    println!("s3 = {}", s3);
-    do_stuff_reference(&s1);
-    println!("{}", s1);
-    do_stuff_owner(s2);
-    do_stuff_mutable_reference(&mut s1);
-    // println!("{}", s2);
-
     let mut rng = thread_rng();
     let rng_val: f64 = rng.gen();
     println!("Range val = {}", rng_val);
@@ -48,4 +38,66 @@ fn main() {
 
     // let enimgma: i32;
     // println!("enigma has value {}", enimgma);
+
+    // strings, owners and references
+    let mut s1 = String::from("abc");
+    let s2 = String::from("abc");
+    let s3 = s1.clone();
+    println!("s3 = {}", s3);
+    do_stuff_reference(&s1);
+    println!("{}", s1);
+    do_stuff_owner(s2);
+    do_stuff_mutable_reference(&mut s1);
+    // println!("{}", s2);
+    // structs
+    let mut fox = RedFox::new();
+    let life_left = fox.life;
+    println!("fox life = {}", life_left);
+    fox.enemy = false;
+    println!("fox life = {}", fox.some_method());
+    println!("is fox moved... {}", fox.enemy);
+
+    fox.run();
+    print_noise(fox);
 }
+
+struct RedFox {
+    enemy: bool,
+    life: u8,
+}
+
+impl RedFox {
+    fn new() -> Self {
+        Self {
+            enemy: true,
+            life: 70,
+        }
+    }
+
+    fn some_method(&self) -> bool {
+        self.enemy
+    }
+}
+
+impl Noisy for RedFox {
+    fn get_noise(&self) -> &str {
+        "Meow!"
+    }
+}
+
+trait Noisy {
+    fn get_noise(&self) -> &str;
+}
+
+// T variable for any object implementing the type
+fn print_noise<T: Noisy>(item: T) {
+    println!("{}", item.get_noise());
+}
+
+// default implementation of trait method
+trait Run {
+    fn run(&self) {
+        println!("Run forest, run")
+    }
+}
+impl Run for RedFox {}
