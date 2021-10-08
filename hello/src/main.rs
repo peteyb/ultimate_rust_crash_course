@@ -1,6 +1,8 @@
 const MY_CONST: i32 = 100;
 use hello::{do_stuff_mutable_reference, do_stuff_owner, do_stuff_reference, greet};
 use rand::prelude::*;
+use std::collections::HashMap;
+use std::fs::File;
 
 fn main() {
     let mut rng = thread_rng();
@@ -59,6 +61,102 @@ fn main() {
 
     fox.run();
     print_noise(fox);
+
+    // collections
+    let mut v: Vec<i32> = Vec::new();
+    v.push(2);
+    v.push(4);
+    v.push(5);
+    println!("v = {:?}", v);
+    println!("val2 = {}", v[2]);
+    let x = v.pop();
+    println!("x = {:?} and {:?}", x, v);
+
+    let v2 = vec![2, 4, 6];
+    println!("v2 = {:?}", v2);
+
+    let mut h: HashMap<u8, bool> = HashMap::new();
+    h.insert(5, true);
+    h.insert(6, false);
+    let have_five = h.remove(&5).unwrap();
+    println!("have five = {}", have_five);
+
+    // enums
+    let colour1 = Colour::Red;
+    let colour2 = Colour::Green;
+    let colour3 = Colour::Blue;
+    println!("Colour 1 = {:?}", colour1);
+    println!("Colour 2 = {:?}", colour2);
+    println!("Colour 3 = {:?}", colour3);
+
+    let item1 = DispenderItem::Place { x: 1, y: 2 };
+    println!("item = {:?}", item1);
+
+    if let DispenderItem::Place { x: 1, y: 2 } = item1 {
+        println!("a: item is a dispenser");
+    }
+
+    match item1 {
+        DispenderItem::Empty => {
+            println!("b: item is an empty dispenser");
+        }
+        DispenderItem::Ammo(x) => {
+            println!("b: item is ammo with value {}", x);
+        }
+        // DispenderItem::Things(x, y) => {
+        //     println!("b: item is a Thing with values {} and {}", x, y);
+        // }
+        DispenderItem::Place { x, y } => {
+            println!("b: item is a Place {} and {}", x, y);
+        }
+        _ => {
+            println!("Default")
+        }
+    }
+
+    let item2 = DispenderItem::Ammo(5);
+    let item3 = DispenderItem::Empty;
+    let item4 = DispenderItem::Things(String::from("test"), 5);
+    println!("item2 = {:?}", item2);
+    println!("item3 = {:?}", item3);
+    println!("item4 = {:?}", item4);
+
+    let my_match = match item2 {
+        DispenderItem::Ammo(x) => x + 1,
+        _ => 1,
+    };
+    println!("my_match = {:?}", my_match);
+
+    // enum Option
+    let mut option1: Option<i32> = None;
+    println!("option1 = {:?}", option1);
+    option1 = Some(5);
+    println!("option1 = {:?}", option1);
+    println!("option1 is_some = {:?}", option1.is_some());
+    println!("option1 is_none = {:?}", option1.is_none());
+    for i in option1 {
+        println!("{}", i);
+    }
+
+    // enum Result
+    let res = File::open("foo");
+    if res.is_err() {
+        println!("Could not open file")
+    }
+    if res.is_ok() {
+        let f = res.unwrap();
+        println!("{:?}", f);
+    }
+
+    let res2 = File::open("bar");
+    match res2 {
+        Ok(f) => {
+            println!("file opened {:?}", f)
+        }
+        Err(e) => {
+            println!("File open error {}", e)
+        }
+    }
 }
 
 struct RedFox {
@@ -101,3 +199,19 @@ trait Run {
     }
 }
 impl Run for RedFox {}
+
+// enum definitions
+#[derive(Debug)]
+enum Colour {
+    Red,
+    Green,
+    Blue,
+}
+
+#[derive(Debug)]
+enum DispenderItem {
+    Empty,
+    Ammo(u8),
+    Things(String, i32),
+    Place { x: i32, y: i32 },
+}
