@@ -7,15 +7,13 @@ pub fn inspect(s: &str) {
 }
 
 pub fn change(s: &mut String) {
-    s.push('s')
+    if !s.ends_with('s') {
+        s.push('s')
+    }
 }
 
 pub fn eat(s: String) -> bool {
-    if s.starts_with('b') && s.contains('a') {
-        true
-    } else {
-        false
-    }
+    s.starts_with('b') && s.contains('a')
 }
 
 pub fn add(x: &i32, y: &i32) -> i32 {
